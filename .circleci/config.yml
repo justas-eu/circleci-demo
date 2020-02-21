@@ -7,6 +7,7 @@ jobs:
   store:
     docker:
     - image: circleci/openjdk:8-jdk-node
+    parallelism: 1   
     steps:
       - store_artifacts:
           path: target/*.jar 
