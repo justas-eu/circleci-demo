@@ -9,12 +9,12 @@ jobs:
     - image: circleci/openjdk:8-jdk-node
     parallelism: 1   
     steps:
+      - maven/test           # checkout, build, test, and upload test results
       - store_artifacts:
           path: target/*.jar 
 
 workflows:
   maven_test:
     jobs:
-      - maven/test # checkout, build, test, and upload test results
       - store
    
