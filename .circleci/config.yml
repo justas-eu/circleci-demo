@@ -1,20 +1,32 @@
 version: 2.1
 
-orbs:
-  maven: circleci/maven@0.0.12
-
 jobs:
-  store:
+  build:
     docker:
-    - image: circleci/openjdk:8-jdk-node
-    parallelism: 1   
+      - image: circleci/openjdk:8u242-jdk
+
+    working_directory: ~/work
+
     steps:
-      - maven/test           # checkout, build, test, and upload test results
+      - checkout
+      - restore_cache:
+          keys:
+            - cache-{{ checksum "pom.xml" }}
+      - run:
+          name: Perform Build
+          command: mvn clean install
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: cache-{{ checksum "pom.xml" }}
       - store_artifacts:
-          path: target/*.jar 
+          path: target/circleci2-0.0.1-SNAPSHOT.jar
+      - persist_to_workspace:
+          root: artifacts
+          paths:
+            - circleci2-0.0.1-SNAPSHOT.jar
 
 workflows:
-  maven_test:
+  build-deploy:
     jobs:
-      - store
-   
+      - build:
