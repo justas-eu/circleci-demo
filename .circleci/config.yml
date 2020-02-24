@@ -29,4 +29,4 @@ jobs:
 workflows:
   build-deploy:
     jobs:
-      - build:
+      - build
